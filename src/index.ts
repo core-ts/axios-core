@@ -4,15 +4,11 @@ export interface Headers {
   [key: string]: any;
 }
 
-export interface HttpOptionsService {
-  getHttpOptions(): { headers?: Headers };
-}
-
 export class HttpRequest {
-  constructor(private axios: AxiosInstance, private httpOptionsService: HttpOptionsService) {}
-  private getHttpOptions(): { headers?: Headers } {
-    if (this.httpOptionsService) {
-      return this.httpOptionsService.getHttpOptions();
+  constructor(private axios: AxiosInstance, private getHttpOptions?: () => { headers?: Headers }) {}
+  private getOptions(): { headers?: Headers } {
+    if (this.getHttpOptions) {
+      return this.getHttpOptions();
     } else {
       const httpOptions = {
         headers: {
@@ -25,7 +21,7 @@ export class HttpRequest {
 
   get<T>(url: string, options?: {headers?: Headers}): Promise<T> {
     return Promise.resolve(
-      this.axios.get<T>(url, options ? options : this.getHttpOptions())
+      this.axios.get<T>(url, options ? options : this.getOptions())
       .then(({data}) => data)
       .catch(({data}) => { throw data; })
     );
@@ -33,7 +29,7 @@ export class HttpRequest {
 
   delete<T>(url: string, options?: {headers?: Headers}): Promise<T> {
     return Promise.resolve(
-      this.axios.delete(url, options ? options : this.getHttpOptions())
+      this.axios.delete(url, options ? options : this.getOptions())
       .then(({data}) => data)
       .catch(({data}) => { throw data; })
     );
@@ -41,7 +37,7 @@ export class HttpRequest {
 
   post<T>(url: string, obj: any, options?: {headers?: Headers}): Promise<T> {
     return Promise.resolve(
-      this.axios.post(url, obj, options ? options : this.getHttpOptions())
+      this.axios.post(url, obj, options ? options : this.getOptions())
       .then(({data}) => data)
       .catch(({data}) => { throw data; })
     );
@@ -49,7 +45,7 @@ export class HttpRequest {
 
   put<T>(url: string, obj: any, options?: {headers?: Headers}): Promise<T> {
     return Promise.resolve(
-      this.axios.put(url, obj, options ? options : this.getHttpOptions())
+      this.axios.put(url, obj, options ? options : this.getOptions())
       .then(({data}) => data)
       .catch(({data}) => { throw data; })
     );
@@ -57,7 +53,7 @@ export class HttpRequest {
 
   patch<T>(url: string, obj: any, options?: {headers?: Headers}): Promise<T> {
     return Promise.resolve(
-      this.axios.patch<T>(url, obj, options ? options : this.getHttpOptions())
+      this.axios.patch<T>(url, obj, options ? options : this.getOptions())
       .then(({data}) => data)
       .catch(({data}) => { throw data; })
     );
