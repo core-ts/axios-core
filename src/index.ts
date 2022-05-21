@@ -5,7 +5,13 @@ export interface Headers {
 }
 
 export class HttpRequest {
-  constructor(private axios: AxiosInstance, private getHttpOptions?: () => { headers?: Headers }) {}
+  constructor(private axios: AxiosInstance, private getHttpOptions?: () => { headers?: Headers }) {
+    this.get = this.get.bind(this);
+    this.delete = this.delete.bind(this);
+    this.post = this.post.bind(this);
+    this.put = this.put.bind(this);
+    this.patch = this.patch.bind(this);
+  }
   private getOptions(): { headers?: Headers } {
     if (this.getHttpOptions) {
       return this.getHttpOptions();
@@ -18,23 +24,18 @@ export class HttpRequest {
       return httpOptions;
     }
   }
-
   get<T>(url: string, options?: {headers?: Headers}): Promise<T> {
     return Promise.resolve(this.axios.get<T>(url, options ? options : this.getOptions()).then(({data}) => data));
   }
-
   delete<T>(url: string, options?: {headers?: Headers}): Promise<T> {
     return Promise.resolve(this.axios.delete(url, options ? options : this.getOptions()).then(({data}) => data));
   }
-
   post<T>(url: string, obj: any, options?: {headers?: Headers}): Promise<T> {
     return Promise.resolve(this.axios.post(url, obj, options ? options : this.getOptions()).then(({data}) => data));
   }
-
   put<T>(url: string, obj: any, options?: {headers?: Headers}): Promise<T> {
     return Promise.resolve(this.axios.put(url, obj, options ? options : this.getOptions()).then(({data}) => data));
   }
-
   patch<T>(url: string, obj: any, options?: {headers?: Headers}): Promise<T> {
     return Promise.resolve(this.axios.patch<T>(url, obj, options ? options : this.getOptions()).then(({data}) => data));
   }
