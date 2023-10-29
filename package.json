@@ -1,6 +1,6 @@
 {
   "name": "axios-core",
-  "version": "0.0.5",
+  "version": "1.0.0",
   "description": "axios",
   "main": "./lib/index.js",
   "types": "./src/index.ts",
@@ -9,11 +9,9 @@
     "clean:lib": "rimraf lib"
   },
   "devDependencies": {
+    "axios": "^0.18.0",
     "tslint": "5.10.0",
     "typescript": "^3.8.3"
-  },
-  "peerDependencies": {
-    "axios": "^0.18.0"
   },
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
